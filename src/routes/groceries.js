@@ -36,4 +36,13 @@ router.post("/", (req, res) => {
   res.send(201);
 });
 
+router.get("/cart", (req, res) => {});
+router.post("/cart/item", (req, res) => {
+  const { item, quantity } = req.body;
+  const cartItem = { item, quantity };
+  console.log(cartItem);
+  console.log(req.session);
+  res.send(req.session);
+});
+
 module.exports = router;
