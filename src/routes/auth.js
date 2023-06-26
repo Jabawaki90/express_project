@@ -1,12 +1,19 @@
 const { Router } = require("express");
 const User = require("../database/schemas/User");
-const { hashPassword } = require("../utils/helpers");
+const { hashPassword, comparePassword } = require("../utils/helpers");
 
 const router = Router();
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  if (username && password) {
+  if (!username || !password) return res.send(400);
+  const userDB = await User.findOne({ username });
+  if (!userDB) return res.send(401);
+  const isValid = comparePassword(password, userDB.password);
+  if (isValid) {
+    return res.send(200);
+  } else {
+    return res.send(401);
   }
 });
 
